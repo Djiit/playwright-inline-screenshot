@@ -27,7 +27,7 @@ function makeReporter(statuses: TestResult["status"] = "failed") {
   const output: string[] = [];
   const reporter = new InlineScreenshotReporter({
     mode: "iterm2",
-    stream: { write: (chunk: string) => void output.push(chunk) },
+    stream: { write: (chunk: string) => { output.push(chunk); return true; } },
   });
   return { reporter, output, status: statuses };
 }
@@ -132,7 +132,7 @@ describe("InlineScreenshotReporter", () => {
     const reporter = new InlineScreenshotReporter({
       mode: "artifact",
       artifactBaseDir: tmp,
-      stream: { write: (chunk: string) => void output.push(chunk) },
+      stream: { write: (chunk: string) => { output.push(chunk); return true; } },
     });
     reporter.onTestEnd(
       fakeTest(),
@@ -151,7 +151,7 @@ describe("InlineScreenshotReporter", () => {
     const output: string[] = [];
     const reporter = new InlineScreenshotReporter({
       mode: "off",
-      stream: { write: (chunk: string) => void output.push(chunk) },
+      stream: { write: (chunk: string) => { output.push(chunk); return true; } },
     });
     reporter.onTestEnd(
       fakeTest(),
