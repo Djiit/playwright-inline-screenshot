@@ -79,14 +79,29 @@ If the `CI` environment variable is not present, screenshots are output in the b
 
 ## Releasing
 
-CI runs the build and tests on every push and pull request. To cut a release:
+CI runs the build and tests on every push and pull request. Releases publish to
+npm via [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC) —
+no npm token is stored in the repository.
+
+### One-time bootstrap
+
+Trusted publishing can only be configured for a package that already exists on
+npm, so the first publish is manual:
+
+1. `npm login`, then from the repo root: `npm publish --access public`.
+2. On npmjs.com, open the package → Settings → Trusted publishing, and add a
+   trusted publisher: provider GitHub, owner `Djiit`, repository
+   `playwright-inline-screenshot`, workflow `.github/workflows/release.yml`,
+   environment *(none)*.
+
+### Cutting a release
 
 1. Bump `version` in `package.json` and commit.
 2. Push a matching tag: `git tag vX.Y.Z && git push origin vX.Y.Z`.
 
-The Release workflow then verifies the tag matches the package version, runs the
-build and tests, publishes to npm (with provenance), and creates a GitHub
-release with generated notes.
+The Release workflow then verifies the tag matches the package version, runs
+the build and tests, publishes to npm (with provenance, no token), and creates
+a GitHub release with generated notes.
 
 ## License
 

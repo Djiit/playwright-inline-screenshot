@@ -7,13 +7,12 @@ on:
 
 permissions:
   contents: write # create the GitHub release
-  id-token: write # npm provenance
+  id-token: write # npm trusted publishing (OIDC)
 
 jobs:
   publish:
     name: Build, test, and publish to npm
     runs-on: ubuntu-latest
-    environment: npm
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -21,6 +20,9 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+      # Trusted publishing requires npm >= 11.5.1; Node 22 ships npm 10.x.
+      - name: Upgrade npm
+        run: npm install --global npm@latest
       - name: Check tag matches package.json version
         run: |
           VERSION=$(node -p "require('./package.json').version")
@@ -31,9 +33,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      # Authenticates via OIDC trusted publishing — no NPM_TOKEN needed.
+      # Provenance is generated automatically by npm.
       - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create GitHub release
         run: gh release create "$GITHUB_REF_NAME" --generate-notes
         env:
