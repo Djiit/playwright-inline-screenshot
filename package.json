@@ -1,7 +1,16 @@
 {
   "name": "playwright-inline-screenshot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Inline screenshots for Playwright tests — failed-test screenshots rendered inline in iTerm2 and Buildkite build logs",
+  "author": "Julien Tanay <julien.tanay@gmail.com> (https://github.com/Djiit)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Djiit/playwright-inline-screenshot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Djiit/playwright-inline-screenshot/issues"
+  },
+  "homepage": "https://github.com/Djiit/playwright-inline-screenshot#readme",
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
