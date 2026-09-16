@@ -77,6 +77,17 @@ If the `CI` environment variable is not present, screenshots are output in the b
 - Playwright already captures failure screenshots natively (`use: { screenshot: "only-on-failure" }`), so this package only needs to do the inlining — there is nothing to include in your tests.
 - iTerm2 sequences are emitted as a single escape; very large screenshots may be better served by artifact mode.
 
+## Releasing
+
+CI runs the build and tests on every push and pull request. To cut a release:
+
+1. Bump `version` in `package.json` and commit.
+2. Push a matching tag: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+
+The Release workflow then verifies the tag matches the package version, runs the
+build and tests, publishes to npm (with provenance), and creates a GitHub
+release with generated notes.
+
 ## License
 
 See the [LICENSE.md](LICENSE.md) file for license rights and limitations (MIT).
